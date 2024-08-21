@@ -25,8 +25,6 @@ PLANT_ID_API_URL = "https://plant.id/api/v3/identification"
 url = "https://plant.id/api/v3/identification?details=common_names,url,description,taxonomy,rank,gbif_id,inaturalist_id,image,synonyms,edible_parts,watering&language=en"
 
 # Replace with your Plant.id API token
-PLANT_ID_API_KEY_OLD = "fD36bEMgJsEKDxWoEQHp8kvgeSAMH97j84vlZmaRguzJjv59HK"
-PLANT_ID_API_KEY_OLD = "CW066FNcuEPNfjkhv6YEfeB9F9HPrEkTaAQdFiSZEU7epfjLMd"
 PLANT_ID_API_KEY = "SMVUfdDn8bs2BPxl5m9JYXSnGFOVIaRzAY65DIm9NBTKNJfG7p"
 
 @app.route('/', methods=['GET'])
