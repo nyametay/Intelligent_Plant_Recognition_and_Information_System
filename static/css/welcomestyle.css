@@ -120,6 +120,15 @@ body.dark-theme{
   --container-color: hsl(var(--hue), 8%, 16%);
 }
 
+/*========== Variables Light theme ==========*/
+body.light{
+  --title-color: hsl(var(--hue), 4%, 15%);
+  --text-color: hsl(var(--hue), 4%, 35%);
+  --body-color: hsl(var(--hue), 0%, 100%);
+  --container-color: #FFF;
+  --drop-color: none;
+}
+
 /*========== Button Dark/Light ==========*/
 .change-theme{
   color: var(--title-color);

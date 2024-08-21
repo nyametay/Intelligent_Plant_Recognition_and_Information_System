@@ -32,7 +32,8 @@ def welcome():
     if 'username'in session:
         flash('User has already logged in', 'info')
         return redirect(url_for('home'))
-    return render_template('welcome.html')
+    theme = session.get('theme', 'light')
+    return render_template('welcome.html', data={'theme':theme})
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
