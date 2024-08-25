@@ -28,6 +28,7 @@ body.light {
 
 :root {
     --grey: #f2f2f2;
+    --hue: 152;
 }
 
 .body{

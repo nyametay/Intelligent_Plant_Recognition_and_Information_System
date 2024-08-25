@@ -43,7 +43,8 @@ def signin():
                 # The user has logged and it hasnt been 10 days yet
                 flash('User has already logged in', 'info')
                 return redirect(url_for('home'))
-            return render_template('signin.html')
+            theme = session.get('theme', 'light')
+            return render_template('signin.html', data={'theme':theme})
         elif request.method == 'POST':
             # Gets User log in info
             username = str(request.form['username']).strip()
@@ -83,7 +84,8 @@ def signup():
                 # The user has logged and it hasnt been 10 days yet
                 flash('User has already logged in', 'info')
                 return redirect('home')
-            return render_template('signup.html')
+            theme = session.get('theme', 'light')
+            return render_template('signup.html', data={'theme': theme})
         elif request.method == 'POST':
             # Gets users data to be stored in the database
             name = str(request.form['name']).strip()
