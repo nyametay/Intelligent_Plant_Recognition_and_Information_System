@@ -26,6 +26,7 @@ url = "https://plant.id/api/v3/identification?details=common_names,url,descripti
 
 # Replace with your Plant.id API token
 PLANT_ID_API_KEY = "SMVUfdDn8bs2BPxl5m9JYXSnGFOVIaRzAY65DIm9NBTKNJfG7p"
+PLANT_ID_API_KEY_NEW = "G0SyXknxTXJD0R8DyS5rVWlL9A05s8VrGFaXSGGEmHznnOho1u"
 
 @app.route('/', methods=['GET'])
 def welcome():
