@@ -674,6 +674,49 @@ def review():
         flash('An error occured please try again', 'danger')
         return redirect(url_for('setting'))
 
+@app.route("/forgot", methods=['POST', 'GET'])
+def forgot():
+    try:
+        if request.method == 'GET':
+            if 'username' in session:
+                flash('User account already logged in', 'info')
+                return redirect(url_for('home'))
+            theme = session.get('theme', 'light')
+            return render_template('forgot.html', data={'theme': theme})
+        elif request.method == 'POST':
+            username = str(request.form['username']).strip()
+            name = str(request.form['name']).strip()
+            email = str(request.form['email']).strip()
+            new_password = str(request.form['password']).strip()
+            if len(new_password) < 8:
+                flash('Password less than 8', 'danger')
+                return redirect(url_for('forgot'))
+            if not check_password(new_password):
+                flash('Password must contain Letters, Numbers and Symbols', 'danger')
+                return redirect('forgot')
+            passwordCount = password_count(new_password) 
+            if username_exists(username):
+                user = get_user(username)
+                if username == user.username and name == user.name and email == user.email:
+                    if new_password == user.password:
+                        flash('Used an old password', 'info')
+                        return redirect(url_for('forgot'))
+                    if passwordCount != 0:
+                        flash('Password has been used', 'warning')
+                        return redirect(url_for('forgot'))
+                    user.password = new_password
+                    db.session.commit()
+                    flash('Password updated successfully', 'success')
+                    return redirect(url_for('signin'))  
+                flash('Details do not match', 'danger')
+                return redirect(url_for('forgot'))
+            flash('Account not found', 'danger')
+            return redirect(url_for('signup'))
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        flash('An error occured please try again', 'danger')
+        return redirect(url_for('forgot'))
+
 @app.route("/logout", methods=['GET'])
 def logout():
     session.pop('username', None)
