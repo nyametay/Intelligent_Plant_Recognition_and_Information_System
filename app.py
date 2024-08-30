@@ -11,7 +11,7 @@ import requests
 import json
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nyameget:17cvsOhOqdY8Kc6ylEi2KNMyioBE3I8h@dpg-cqln8dlumphs7397crmg-a.oregon-postgres.render.com/dbname_ksxs'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nyameget:xU9xKSe8zsSaeLqrUeotCAsdWNTzSwXX@dpg-cr938hq3esus73bfgb7g-a.oregon-postgres.render.com/dbname_skju'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '1567tay'
 app.permanent_session_lifetime = timedelta(days=10)
