@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block additional_styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
 {% block content %}
      <!--==================== HOME ====================-->
     <section class="home" id="home">
@@ -13,9 +17,23 @@
                 <p class="home__description">
                     Our Plant Identification System Simplifies Your Botanical Journey!.
                 </p>
-                <a href="/scan" class="button button--flex">
+                <a href="#" class="button button--flex" id="choose_path">
                     Identify Plant <i class="ri-arrow-right-down-line button__icon"></i>
                 </a>
+                <div id="modal" class="popup">
+                    <div class="overlay"></div>
+                    <div class="content">
+                        <h2>Form of Identification</h2>
+                        <p id="notice">User can search for plant by name or their image</p>
+                        <button class="modal-button text-button" id="textButton">
+                            Use text
+                        </button>
+                        <button class="modal-button image-button" id="imageButton">
+                            Use image
+                        </button>
+                        <span class="close-btn" id="closeModal">&times;</span>
+                    </div>
+                </div>
             </div>
 
             <div class="home__social">
@@ -35,4 +53,8 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block additional_script %} 
+    <script src="{{ url_for('static', filename='scripts/option.js') }}"></script>
 {% endblock %}

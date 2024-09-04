@@ -431,9 +431,38 @@ def get_plant_description_wikipedia(plant_name):
   else:
     return None
 
+### This checks if the password contains letters, numbers and symbols
 def check_password(password):
   has_alpha = re.search(r'[a-zA-Z]', password) is not None
   has_num = re.search(r'[0-9]', password) is not None
   has_symbol = re.search(r'[^a-zA-Z0-9]', password) is not None
   
   return has_alpha and has_num and has_symbol
+
+### This gets the image from the name entered
+def search_images_and_encode_first(query):
+  api_key = "AIzaSyDybQAwDNM4X_yiIqDjtR9IZS83QhIQlfM"  # Replace with your actual API key
+  search_engine_id = "9321b59816bac4ca6"  # Replace with your actual search engine ID
+
+  url = f"https://www.googleapis.com/customsearch/v1?key={api_key}&cx={search_engine_id}&q={query}&searchType=image"
+
+  try:
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for HTTP errors
+
+    data = response.json()
+    if data["items"]:
+      first_image_url = data["items"][0]["link"]
+
+      image_response = requests.get(first_image_url)
+      image_response.raise_for_status()
+
+      image_data = image_response.content
+      base64_encoded_data = base64.b64encode(image_data).decode('utf-8')
+      return base64_encoded_data
+    else:
+      print("No images found for the query.")
+      return None
+  except requests.exceptions.RequestException as e:
+    print("Error fetching images:", e)
+    return None

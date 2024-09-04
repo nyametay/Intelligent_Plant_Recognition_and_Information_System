@@ -4,11 +4,12 @@ from werkzeug.utils import secure_filename
 from models import db, User, Plant, Comment, email_exists, username_exists, username_count, get_user
 from models import password_count, email_count, get_plants, plants_saved_count, get_reviews
 from usable import watering_message, truncate_words, generate_category, get_plant_uses, get_google_uses, get_plant_uses_family, get_plant_description_wikipedia
-from usable import check_password
+from usable import check_password, search_images_and_encode_first
 import urllib.parse
 import base64
 import requests
 import json
+import logging
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nyameget:xU9xKSe8zsSaeLqrUeotCAsdWNTzSwXX@dpg-cr938hq3esus73bfgb7g-a.oregon-postgres.render.com/dbname_skju'
@@ -239,6 +240,154 @@ def setting():
         flash('User has not logged in', 'info')
         return redirect(url_for('signin'))
 
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    try:
+        if request.method == 'GET':
+            if 'username' in session:
+                theme = session.get('theme', 'light')
+                return render_template('search.html', data={'theme': theme, 'active_page': ''})
+            flash('User has not signed in', 'danger')
+            return redirect(url_for('signin'))
+        elif request.method == 'POST':
+            plant_name = request.form['plant_name']
+            search_url = f"https://plant.id/api/v3/kb/plants/name_search?q={plant_name}&thumbnails=true"
+            print(search_url)
+            headers = {
+                'Api-Key': PLANT_ID_API_KEY,
+                'Content-Type': 'application/json'
+            }
+            response = requests.get(search_url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                entities = data.get('entities', [])
+                if entities:
+                    entity_result = []
+                    for entity in entities:
+                        if entity['matched_in_type'] == 'synonym':
+                            continue
+                        access_token = entity['access_token']
+                        image_base64 = entity['thumbnail']
+                        image_url = f"data:image/jpeg;base64,{image_base64}"
+                        plant_info_url = f"https://plant.id/api/v3/kb/plants/{access_token}?details=common_names,url,description,taxonomy,rank,gbif_id,inaturalist_id,image,synonyms,edible_parts,watering&language=en"
+                        plant_info_response = requests.get(plant_info_url, headers=headers)
+                        result = plant_info_response.json()
+                        if result['watering']:
+                            irrigation_info = watering_message(result['watering'])
+                        if result['common_names']:
+                            # This gets the scientific name of the plant
+                            botanical_name = result['name']
+                            # This gets the family of the plant
+                            family = result['taxonomy']['family']
+                            plant_uses = None
+                            # Check uses for each common name
+                            for common_name in result['common_names']:
+                                if common_name.lower() == family.lower():
+                                    common_name = botanical_name
+                                plant_uses = get_plant_uses(common_name, botanical_name)
+                                if plant_uses is not None:
+                                    break
+                            # If plant uses not found for any common name, try Google search
+                            if plant_uses is None:
+                                plant_uses = get_google_uses(common_names[0])
+                        else:
+                            if len(result) == 1:
+                                common_names = result['common_names']
+                                common_name = common_names[0]
+                                if common_names:
+                                    # This gets the scientific name of the plant
+                                    botanical_name = result['name']
+                                    # This gets the family of the plant
+                                    family = result['taxonomy']['family']
+                                    plant_uses = None
+                                    # Check uses for each common name
+                                    for common_name in common_names:
+                                        if common_name.lower() == family.lower():
+                                            common_name = botanical_name
+                                        plant_uses = get_plant_uses(common_name, botanical_name)
+                                        if plant_uses is not None:
+                                            break
+                                    # If plant uses not found for any common name, try Google search
+                                    if plant_uses is None:
+                                        plant_uses = get_google_uses(common_names[0])
+                            elif len(result) == 1 and result['common_names'] is None:
+                                family_name = result['taxonomy']['family']
+                                botanical_name = result['name']
+                                plant_uses, common_name = get_plant_uses_family(family_name, botanical_name)
+                                result['common_names'] = [common_name]
+                            else:
+                                print("No common names found in the classification results.")
+
+                        entity_result.append({
+                            'image_url': image_url,
+                            'plant_info': result, 
+                            'plant_uses': plant_uses,
+                            'irrigation_info': irrigation_info
+                        })
+                    plant_details = []
+                    for plant in entity_result:
+                    # Ensure plant.plant_info is not None
+                        if plant['plant_info'] is not None:
+                        # This gets the result portion of the response
+                            result = plant['plant_info']
+                        # Ensure result is not None
+                            if result is not None:
+                                # Gets the common name of the plant
+                                if result['common_names'] is not None:
+                                    common_name = result['common_names'][0]
+                                    # Gets the name of the plant
+                                    plant_name = result['name']                            
+                                # Gets the taxonomy of the plant
+                                taxonomy = result['taxonomy']
+                                list_taxonomy = list(taxonomy.items())[::-1]
+                                reversed_taxonomy = {key: value for key, value in list_taxonomy}
+                                # Gets the description of the plant
+                                if result['description']:
+                                    description = result['description']['value']
+                                description = truncate_words(description, 60)
+                                # Checks if  the plant is edible
+                                edible_parts = result['edible_parts']
+                                # Checks the watering conditions
+                                watering = result['watering']
+                                irrigation_info = watering_message(watering)
+                                identification_results = {
+                                    'name': plant_name,
+                                    'common_name': common_name,
+                                    'taxonomy': reversed_taxonomy,
+                                    'description': description,
+                                    'edible_part': edible_parts,
+                                    'watering': irrigation_info
+                                }
+                                image_result = search_images_and_encode_first(common_name)  
+                                print(image_result) 
+                                if image_result:
+                                    print('s')
+                                    image_url = f"data:image/jpeg;base64,{image_result}"
+                                else:
+                                    print('b')
+                                    image_url = plant['image_url']
+                                plant_uses = plant['plant_uses']
+                                if isinstance(plant_uses, set):
+                                    plant_uses = plant_uses
+                                    plant_uses_type = 'set'
+                                elif isinstance(plant_uses, dict):
+                                    plant_uses = plant_uses
+                                    plant_uses = {key: value for key, value in list(plant_uses.items())[::-1]}
+                                    plant_uses_type = 'dict'
+                                plant_details.append({
+                                    'image_url': image_url,
+                                    'plant_data': identification_results,
+                                    'plant_uses': plant_uses,
+                                    'plant_uses_type': plant_uses_type
+                                })  
+                    theme = session.get('theme', 'light')
+                    return render_template('search_result.html', data={'active-page': '', 'plant': plant_details, 'theme': theme})
+    except  Exception as e:
+        print(f"An error occurred: {str(e)}")
+        print(logging.exception(e))
+        flash('An error occured please try again', 'danger')
+        return redirect(url_for('search'))
+                                                
 @app.route("/about", methods={"GET"})
 def about():
     try:

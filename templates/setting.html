@@ -46,6 +46,7 @@
                     </div>
                 </div>
             </form>
+            <!--
             <div>
                 <form action=""> 
                     <h2 class="setting-part">Application Settings</h2>
@@ -75,21 +76,22 @@
                     </div>
                 </form>
             </div>
+            -->
             <div>
                 <div class="form-group">
                     <div class="popup" id="popup-1">
                         <div class="overlay"></div>
-                        <div class="content">
-                            <div class="close-btn" onclick="togglePopup()">&times;</div>
-                            <h2>Delete User's Account</h2>
-                            <p id="warning">Are you sure you want to delete this account?</p>
-                            <form method="post" action="{{ url_for('setting') }}">
-                                <input type="text" name="decision" value="yes" hidden>
-                                <button type="submit" class="toggle-btn">YES</button>
-                                <button type="button" onclick="togglePopup()" class="toggle-btn">NO</button>
-                            </form>
+                            <div class="content">
+                                <div class="close-btn" onclick="togglePopup()">&times;</div>
+                                <h2>Delete User's Account</h2>
+                                <p id="warning">Are you sure you want to delete this account?</p>
+                                <form method="post" action="{{ url_for('setting') }}">
+                                    <input type="text" name="decision" value="yes" hidden>
+                                    <button type="submit" class="toggle-btn">YES</button>
+                                    <button type="button" onclick="togglePopup()" class="toggle-btn">NO</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
                     <label for="delete_account">Delete Account:</label>
                     <button type="button" id="delete_account" name="delete_account" onclick="togglePopup()" class="btn">Delete</button>
                 </div>
