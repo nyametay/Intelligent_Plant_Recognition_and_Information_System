@@ -26,8 +26,8 @@ PLANT_ID_API_URL = "https://plant.id/api/v3/identification"
 url = "https://plant.id/api/v3/identification?details=common_names,url,description,taxonomy,rank,gbif_id,inaturalist_id,image,synonyms,edible_parts,watering&language=en"
 
 # Replace with your Plant.id API token
-PLANT_ID_API_KEY = "SMVUfdDn8bs2BPxl5m9JYXSnGFOVIaRzAY65DIm9NBTKNJfG7p"
-PLANT_ID_API_KEY_NEW = "G0SyXknxTXJD0R8DyS5rVWlL9A05s8VrGFaXSGGEmHznnOho1u"
+PLANT_ID_API_KEY_OLD = "SMVUfdDn8bs2BPxl5m9JYXSnGFOVIaRzAY65DIm9NBTKNJfG7p"
+PLANT_ID_API_KEY = "G0SyXknxTXJD0R8DyS5rVWlL9A05s8VrGFaXSGGEmHznnOho1u"
 
 @app.route('/', methods=['GET'])
 def welcome():
