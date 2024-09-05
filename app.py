@@ -359,12 +359,9 @@ def search():
                                     'watering': irrigation_info
                                 }
                                 image_result = search_images_and_encode_first(common_name)  
-                                print(image_result) 
                                 if image_result:
-                                    print('s')
                                     image_url = f"data:image/jpeg;base64,{image_result}"
                                 else:
-                                    print('b')
                                     image_url = plant['image_url']
                                 plant_uses = plant['plant_uses']
                                 if isinstance(plant_uses, set):

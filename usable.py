@@ -3,6 +3,7 @@ import wikipediaapi
 import requests
 import urllib.parse
 import re
+import base64
 
 ### This transforms the numbers to a message
 def watering_message(watering):
