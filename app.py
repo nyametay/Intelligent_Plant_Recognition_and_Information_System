@@ -12,7 +12,7 @@ import json
 import logging
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nyameget:xU9xKSe8zsSaeLqrUeotCAsdWNTzSwXX@dpg-cr938hq3esus73bfgb7g-a.oregon-postgres.render.com/dbname_skju'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nyameget:iNP9Idbfq5Vk2v7CUtoi8jEXoQTsiP85@dpg-cu042nij1k6c73dv36eg-a.oregon-postgres.render.com/dname_fyh2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '1567tay'
 app.permanent_session_lifetime = timedelta(days=10)
