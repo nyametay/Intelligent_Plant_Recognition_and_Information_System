@@ -1,0 +1,115 @@
+{% extends "partials/base.html" %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="relative py-24 bg-gradient-to-b from-green-50 via-white to-green-100 dark:from-gray-900 dark:via-gray-950 dark:to-black transition-colors duration-500">
+  <div class="container mx-auto px-6 text-center">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-green-700 dark:text-green-400 mb-4">About IPRIS</h1>
+    <p class="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+      The Intelligent Plant Recognition and Information System (IPRIS) was built to bridge the gap between
+      technology and nature — empowering users to explore, identify, and learn about the plants around them
+      in just seconds.
+    </p>
+  </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="py-20">
+  <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+    <img
+      src="{{ url_for('static', filename='images/img/about.png') }}"
+      alt="About Image"
+      class="w-full rounded-2xl shadow-2xl hover:scale-[1.02] transition-transform duration-500"
+    >
+
+    <div>
+      <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-6">Why Choose Us?</h2>
+      <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
+        With our cutting-edge AI technology and plant recognition API, IPRIS ensures high accuracy,
+        instant results, and detailed plant insights — all for free.
+      </p>
+
+      <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+        <li class="flex items-start gap-3">
+          <i class="ri-checkbox-fill text-green-600 dark:text-green-400 text-xl"></i>
+          <span>Powered by one of the world’s most reliable plant identification APIs.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <i class="ri-checkbox-fill text-green-600 dark:text-green-400 text-xl"></i>
+          <span>Provides identification accuracy of 90%+ within just 2 seconds.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <i class="ri-checkbox-fill text-green-600 dark:text-green-400 text-xl"></i>
+          <span>Gives you detailed care and maintenance guides for your plants.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <i class="ri-checkbox-fill text-green-600 dark:text-green-400 text-xl"></i>
+          <span>100% Free to use with a simple and elegant interface.</span>
+        </li>
+      </ul>
+
+      <a
+        href="/scan"
+        class="mt-10 inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-xl
+               hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600
+               font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+      >
+        Identify Plant Now
+        <i class="ri-arrow-right-down-line ml-2 text-xl"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-20 bg-green-100 dark:bg-gray-800 transition-colors duration-500">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-6">Our Mission</h2>
+    <p class="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-10">
+      Our mission is to make plant identification accessible to everyone — from curious learners
+      to professional botanists. We aim to build a digital ecosystem that nurtures curiosity,
+      sustainability, and a deeper connection with the natural world.
+    </p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-xl transition">
+        <i class="ri-leaf-line text-green-600 dark:text-green-400 text-4xl mb-3"></i>
+        <h3 class="font-semibold text-xl mb-2">Eco Awareness</h3>
+        <p class="text-gray-600 dark:text-gray-300">Promoting a greener future by helping users learn about biodiversity and plant conservation.</p>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-xl transition">
+        <i class="ri-lightbulb-flash-line text-green-600 dark:text-green-400 text-4xl mb-3"></i>
+        <h3 class="font-semibold text-xl mb-2">Innovation</h3>
+        <p class="text-gray-600 dark:text-gray-300">Using AI and data science to revolutionize how people discover and care for plants.</p>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-xl transition">
+        <i class="ri-community-line text-green-600 dark:text-green-400 text-4xl mb-3"></i>
+        <h3 class="font-semibold text-xl mb-2">Community</h3>
+        <p class="text-gray-600 dark:text-gray-300">Building a community of nature lovers who share knowledge and passion for plants.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-500">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-12">Meet Our Team</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div class="bg-green-50 dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:scale-105 transition-transform">
+        <img src="{{ url_for('static', filename='images/img/how.png') }}" alt="Team Member" class="w-32 h-32 mx-auto rounded-full mb-4 object-cover shadow-md">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Isaac Taylor</h3>
+        <p class="text-green-600 dark:text-green-400 mb-2">Lead Developer</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Passionate about AI-driven solutions that connect people with nature.</p>
+      </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16 text-center bg-gradient-to-r from-green-600 to-green-700 text-white dark:from-green-500 dark:to-green-600 transition-all">
+  <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Explore the World of Plants?</h2>
+  <p class="mb-8 text-lg text-green-100">Start identifying plants in seconds with IPRIS — simple, fast, and free.</p>
+  <a href="/signup" class="px-8 py-3 bg-white text-green-700 font-semibold rounded-xl hover:bg-green-100 transition">Get Started</a>
+</section>
+
+{% endblock %}

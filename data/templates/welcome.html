@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IPRIS - Intelligent Plant Recognition</title>
+
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/img/favicon.png') }}" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script>
+      // On initial load, apply saved theme (if any)
+      if (localStorage.theme === 'dark' ||
+          (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config for dark mode -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            green: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+            },
+          },
+        },
+      },
+    }
+  </script>
+</head>
+
+<body class="bg-gradient-to-b from-green-50 via-white to-green-100 dark:from-gray-900 dark:via-gray-950 dark:to-black font-sans text-gray-800 dark:text-gray-200 transition-colors duration-500">
+
+  <!-- Include Header from partials -->
+  {% include 'partials/welcome_header.html' %}
+  {% include 'partials/notification.html' %}
+
+  <main>
+    <!-- Hero Section -->
+    <section class="flex flex-col md:flex-row items-center justify-between container mx-auto py-16 px-6">
+      <img src="{{ url_for('static', filename='images/img/home.png') }}" alt="Plant Illustration"
+           class="w-full md:w-1/2 rounded-xl shadow-xl mb-10 md:mb-0">
+      <div class="md:w-1/2 md:pl-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-green-700 dark:text-green-400 mb-6">IPRIS</h1>
+        <p class="text-lg leading-relaxed mb-8">
+          IPRS - Intelligent Plant Recognition and Information System. Discover the world of plants effortlessly.
+          Whether you're a gardening enthusiast, botanist, or curious explorer, our AI-powered tool identifies any
+          plant in seconds with precision.
+        </p>
+        <a href="/signup" class="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 transition">
+          <i class="ri-leaf-line mr-2"></i> Explore
+        </a>
+      </div>
+    </section>
+
+    <!-- Why Use IPRIS Section -->
+    <section class="bg-green-100 dark:bg-gray-800 py-16 transition-colors">
+      <div class="container mx-auto grid md:grid-cols-2 gap-12 px-6 items-center">
+        <img src="{{ url_for('static', filename='images/img/about.png') }}" alt="About Image"
+             class="w-full rounded-2xl shadow-lg">
+        <div>
+          <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-6">Why Use IPRIS?</h2>
+          <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+            <li>✅ Trusted API with thousands of verified plant records.</li>
+            <li>✅ High accuracy using the latest AI technology.</li>
+            <li>✅ Access an extensive plant database.</li>
+            <li>✅ Simple, intuitive, and beginner-friendly interface.</li>
+            <li>✅ Learn detailed characteristics and care tips for each plant.</li>
+          </ul>
+          <a href="https://web.plant.id/plant-identification-api/"
+             class="mt-6 inline-block text-green-700 dark:text-green-400 font-semibold hover:underline"
+             target="_blank">
+            Learn more about the API →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How To Use IPRIS Section -->
+    <section class="py-16 container mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <img src="{{ url_for('static', filename='images/img/how.png') }}" alt="How To Use"
+             class="w-full rounded-2xl shadow-lg">
+        <div>
+          <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-6">How To Use IPRIS</h2>
+          <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+            <li>📸 <strong>Snap or Choose</strong> a clear photo of the plant.</li>
+            <li>📤 <strong>Upload</strong> your photo using the upload feature.</li>
+            <li>🌿 <strong>Get instant results</strong> with detailed plant information.</li>
+          </ul>
+          <a href="/signup" class="inline-block mt-6 px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 transition">
+            Try It Now
+          </a>
+          <hr class="my-6 border-green-300 dark:border-gray-600">
+          <a href="{{ url_for('review') }}" target="_blank"
+             class="text-green-700 dark:text-green-400 font-semibold hover:underline">View what users think of us →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-green-700 dark:bg-gray-900 text-white text-center py-6 mt-16 transition-colors duration-500">
+    <p>&copy; 2025 IPRIS. All rights reserved.</p>
+  </footer>
+</body>
+</html>

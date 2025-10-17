@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IPRIS - Intelligent Plant Recognition</title>
+
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/img/favicon.png') }}" type="image/x-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            green: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Apply saved theme before page render -->
+  <script>
+    if (localStorage.theme === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+
+<body class="bg-gradient-to-b from-green-50 via-white to-green-100 dark:from-gray-900 dark:via-gray-950 dark:to-black text-gray-800 dark:text-gray-200 transition-colors duration-500 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto flex flex-wrap items-center justify-between py-4 px-6">
+      <a href="/home" class="text-2xl font-extrabold text-green-700 dark:text-green-400 tracking-tight">
+        IPRIS
+      </a>
+
+      <button id="nav-toggle" class="lg:hidden text-2xl text-green-700 dark:text-green-400 focus:outline-none">
+        <i class="ri-menu-line"></i>
+      </button>
+
+      <nav
+  id="nav-menu"
+  class="hidden flex-col space-y-4 w-full bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md
+         lg:flex lg:flex-row lg:space-y-0 lg:space-x-8 lg:bg-transparent lg:shadow-none lg:p-0 lg:w-auto"
+>
+  <a
+    href="/home"
+    class="block hover:text-green-700 dark:hover:text-green-400 font-medium
+           {% if data.active_page == 'home' %}text-green-700 dark:text-green-400{% endif %}"
+  >
+    Home
+  </a>
+
+  <a
+    href="/history"
+    class="block hover:text-green-700 dark:hover:text-green-400 font-medium
+           {% if data.active_page == 'history' %}text-green-700 dark:text-green-400{% endif %}"
+  >
+    History
+  </a>
+
+  <a
+    href="/setting"
+    class="block hover:text-green-700 dark:hover:text-green-400 font-medium
+           {% if data.active_page == 'setting' %}text-green-700 dark:text-green-400{% endif %}"
+  >
+    Settings
+  </a>
+
+  <a
+    href="/about"
+    class="block hover:text-green-700 dark:hover:text-green-400 font-medium
+           {% if data.active_page == 'about' %}text-green-700 dark:text-green-400{% endif %}"
+  >
+    About
+  </a>
+
+  <a
+        href="/logout"
+        class="block text-red-700"
+      >
+        Sign out
+  </a>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+  <!-- Notifications -->
+  {% include 'partials/notification.html' %}
+
+  <!-- Page Content -->
+  <main class="flex-1 container mx-auto px-6 py-10">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 dark:bg-gray-900 text-white text-center py-6 mt-auto">
+    <p>© 2025 IPRIS. All rights reserved.</p>
+  </footer>
+
+  <!-- Floating Theme Toggle -->
+  <button id="theme-toggle" class="fixed bottom-6 right-6 bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 transition">
+    <i id="theme-icon" class="ri-moon-line text-xl"></i>
+  </button>
+
+  <script src="{{ url_for('static', filename='scripts/base.js') }}"></script>
+  {% block additional_script %}{% endblock %}
+</body>
+</html>

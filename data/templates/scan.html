@@ -1,0 +1,91 @@
+{% extends "partials/base.html" %}
+
+{% block content %}
+<section class="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 px-4">
+
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-green-700 dark:text-green-400 mb-2">
+      Identify Plants by Image
+    </h1>
+    <p class="text-gray-600 dark:text-gray-400 text-lg">
+      Upload a photo or capture directly from your camera to identify your plant.
+    </p>
+  </div>
+
+  <!-- Upload Form -->
+  <form id="uploadForm" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data"
+        class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 w-full max-w-md text-center">
+
+    <!-- Hidden base64 input for camera -->
+    <input type="hidden" name="captured_image" id="capturedImageInput">
+
+    <!-- Upload Area -->
+    <label for="fileInput" id="uploadLabel"
+           class="block border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 cursor-pointer hover:border-green-500 transition">
+      <i class="fas fa-cloud-upload-alt text-4xl text-green-500 mb-3"></i>
+      <p class="text-gray-700 dark:text-gray-300 mb-1 font-medium">Click to Upload Image</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Max size: 5MB</p>
+      <input type="file" id="fileInput" name="image" accept="image/*" hidden>
+    </label>
+
+    <!-- Preview of uploaded image -->
+    <img id="uploadPreview" class="mt-4 mx-auto rounded-xl max-h-64 hidden" />
+
+    <!-- OR Divider -->
+    <div class="my-6 flex items-center justify-center">
+      <span class="h-px bg-gray-300 dark:bg-gray-600 w-1/3"></span>
+      <span class="px-3 text-sm text-gray-500 dark:text-gray-400">OR</span>
+      <span class="h-px bg-gray-300 dark:bg-gray-600 w-1/3"></span>
+    </div>
+
+    <!-- Capture Button -->
+    <button type="button" id="openCamera"
+            class="w-full py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition font-semibold">
+      <i class="fas fa-camera mr-2"></i> Use Camera
+    </button>
+
+    <!-- Submit -->
+    <button type="submit"
+            class="w-full mt-5 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition font-semibold">
+      <i class="fas fa-leaf mr-2"></i> Identify Plant
+    </button>
+  </form>
+
+  <!-- Floating Theme Toggle -->
+  <button id="themeToggle" class="fixed bottom-6 right-6 bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 transition">
+    <i id="themeIcon" class="fas fa-moon text-xl"></i>
+  </button>
+</section>
+
+<!-- Camera Modal -->
+<div id="cameraModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-11/12 md:w-1/2 p-6 relative text-center">
+    <h2 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-4">Capture Image</h2>
+
+    <!-- Live Camera -->
+    <video id="cameraFeed" autoplay playsinline class="rounded-xl mx-auto w-full max-h-80 bg-gray-200 dark:bg-gray-700"></video>
+
+    <!-- Preview Canvas -->
+    <canvas id="capturedCanvas" class="hidden mx-auto w-full max-h-80 rounded-xl mt-4"></canvas>
+
+    <!-- Controls -->
+    <div class="flex justify-center gap-4 mt-6">
+      <button id="captureBtn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+        <i class="fas fa-camera"></i> Capture
+      </button>
+      <button id="closeCamera" class="px-6 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition">
+        Close
+      </button>
+    </div>
+
+    <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-500 hover:text-green-500 text-2xl">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>
+{% endblock %}
+
+{% block additional_script %}
+<script src="{{ url_for('static', filename='scripts/scan.js') }}"></script>
+{% endblock %}
