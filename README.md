@@ -1,115 +1,194 @@
-Intelligent Plant Identification and Information System
+# 🌿 Intelligent Plant Recognition System
 
-Welcome to the Intelligent Plant Identification and Information System repository! This project leverages an external API to identify plant species from images and provide detailed information about them. The system is built using Flask for the backend.
+An AI-powered web application that identifies plants, detects diseases, and provides detailed information such as scientific names, taxonomy, watering needs, and uses — all in one place.  
+Built with **Flask**, **TensorFlow**, **BeautifulSoup**, and **Tailwind CSS**.
 
-Table of Contents
-1. Introduction
-2. Features
-3. Installation
-4. Usage
-5. Project Structure
-6. Contact
+This system bridges the gap between **botany** and **artificial intelligence**, providing an interactive and educational way to explore the plant world.  
+Whether you’re a **botanist**, **gardener**, **student**, or **AI enthusiast**, this platform helps you recognize plants, learn about their characteristics, and understand how to care for them.  
 
-Introduction
+The app uses a **deep learning model** to analyze plant images and detect diseases, while an intelligent **data retrieval module** scrapes verified online sources (like PFAF and Wikipedia) to deliver accurate, organized, and human-readable information about each identified plant.
 
-This project aims to create a web application that can identify plant species from uploaded images and provide comprehensive information about them using an external API. The system offers a user-friendly interface and a robust backend to handle image processing and API interactions.
+---
 
-Features
-1. Plant Identification: Recognizes plant species from images using an external API.
-2. Information Retrieval: Provides detailed information about the identified plant species.
-3. User-Friendly Interface: A simple and intuitive web interface for easy interaction.
-4. Scalable Architecture: Designed to handle multiple requests and large datasets.
+## 🧭 Key Highlights
 
-Installation
+- 🌱 **AI-Powered Plant Recognition** — Upload or capture any plant photo and get its exact species prediction.
+- 🔍 **Disease Detection** — Detect common diseases (leaf spots, blight, rot, etc.) with severity categorization.
+- 📚 **Comprehensive Plant Info** — Includes taxonomy, scientific name, description, and watering guide.
+- 🧪 **Use Case Insights** — Displays medicinal, edible, ornamental, and industrial uses.
+- 🌤️ **Beautiful & Responsive UI** — Designed with Tailwind CSS and dark mode support.
+- 🔗 **Smart Fallback System** — Auto-generates a Google search link when specific data isn’t found.
+- ⚡ **Fast & Lightweight** — Optimized for both desktop and mobile users.
+- 🔒 **Environment-Friendly Config** — Secure `.env` API key management for integrations.
 
-Follow these steps to set up the project on your local machine:
+---
 
-Prerequisites
-1. Python 3.7+
-2. Flask
-3. HTML, CSS, and JavaScript knowledge
-4. Virtual environment tools (optional but recommended)
-5. API access (ensure you have access to the required external API)
+## 🧠 Tech Stack
 
-Clone the Repository
-1. git clone https://github.com/nyameget/plant_identification_system.git
-2. cd plant_identification_system
+| Category | Tools |
+|-----------|--------|
+| **Frontend** | HTML5, Jinja2, Tailwind CSS, JavaScript |
+| **Backend** | Flask (Python) |
+| **AI/ML** | TensorFlow / Keras (CNN for classification) |
+| **Web Scraping** | BeautifulSoup4, Requests |
+| **Database** | SQLite / SQLAlchemy (for persistent data) |
+| **API Integration** | Google Custom Search API |
+| **Media Processing** | OpenCV |
+| **Environment Management** | Python-Dotenv |
+| **Deployment** | Render / Railway / Heroku |
 
-Set Up the Virtual Environment
-1. python3 -m venv venv
-2. source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+---
 
-Install the Dependencies
-1. pip install -r requirements.txt
+## 🧩 Folder Structure
 
-Usage
+📁 intelligent-plant-recognition-system
+│
+├── app.py                        # Main Flask application entry point
+├── requirements.txt               # Python dependencies
+│
+├── data/                          # Core backend logic and templates
+│   ├── __init__.py                # Initializes the Flask app
+│   ├── routes.py                  # Defines all application routes
+│   ├── module.py                  # Handles model prediction logic
+│   ├── plant_modules.py           # Processes plant and disease data
+│   ├── models.py                  # SQLAlchemy models and database structure
+│   ├── scraping.py                # Web scraping logic for plant data
+│
+│   ├── templates/                 # All HTML templates
+│   │   ├── partials/              # Reusable components (base, navbar, footer)
+│   │   │   ├── base.html
+│   │   │   ├── navbar.html
+│   │   │   └── footer.html
+│   │   ├── pages/                 # Main app pages
+│   │   │   ├── home.html
+│   │   │   ├── result.html
+│   │   │   ├── history.html
+│   │   │   ├── search_by_text.html
+│   │   │   ├── search_result.html
+│   │   │   └── about.html
+│
+│   ├── static/                    # Static files (frontend assets)
+│   │   ├── css/                   # Stylesheets
+│   │   │   ├── style.css
+│   │   │   ├── homeform.css
+│   │   │   └── card.css
+│   │   ├── scripts/               # JavaScript files
+│   │   │   ├── preview.js
+│   │   │   ├── darkmode.js
+│   │   │   └── main.js
+│   │   ├── images/                # Images and icons
+│   │   │   ├── logo.png
+│   │   │   └── icons/
+│   │   └── uploads/               # Uploaded plant images
+│
+└── README.md
 
-Running the Application
-1. flask run
-2. Navigate to http://127.0.0.1:5000/ in your web browser to use the application.
+---
 
-Uploading an Image
-1. Click on the "Upload Image" button.
-2. Select an image file from your computer.
-3. The system will process the image, identify the plant species, and display detailed information about the plant.
+## 🚀 Installation & Setup
 
-Project Structure
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/yourusername/intelligent-plant-recognition-system.git
+cd intelligent-plant-recognition-system
+```
 
-gender-age-classification_system/
+## 2️⃣ Create a Virtual Environment
+```bash
+python -m venv venv
+source venv/bin/activate       # On Windows: venv\Scripts\activate
+```
 
-├── app/
+## 3️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-│   ├── static/
+## 4️⃣ Add Environment Variables
+Create a .env file in the root directory and add your credentials:
+```ini
+GOOGLE_API_KEY=your_google_api_key
+GOOGLE_CSE_ID=your_custom_search_engine_id
+```
 
-│   │   ├── css/
+## 5️⃣ Run the Application
+```bash
+python app.py
+```
 
-│   │   │   └── styles.css
+Visit:
+```cpp
+http://127.0.0.1:5000
+```
 
-│   │   ├── js/
+## 🧩 How It Works
+- The user uploads or captures an image of a plant.
+- The TensorFlow CNN model predicts the plant species and detects any visible disease.
+- The backend uses BeautifulSoup to scrape verified sources for additional plant details.
+- Data is organized and rendered dynamically using Flask Jinja2 templates.
+- If data is missing, the app generates a Google search link for further exploration.
+- Each identified plant is stored in history for later reference.
 
-│   │   │   └── script.js
+## 🧪 Example Output (JSON)
+```json
+{
+  "results": {
+    "common_name": "Aloe Vera",
+    "name": "Aloe barbadensis",
+    "taxonomy": {
+      "kingdom": "Plantae",
+      "family": "Asphodelaceae",
+      "genus": "Aloe"
+    },
+    "watering": "Moderate watering required, avoid overwatering.",
+    "description": "Aloe vera is a succulent plant species known for its medicinal properties.",
+    "disease_name": "Leaf Spot",
+    "disease_category": "Mild",
+    "disease_description": "Caused by fungal infection resulting in brown lesions.",
+    "plant_uses": {
+      "Medicinal Uses": ["Treats burns", "Improves skin health"],
+      "Edible Uses": ["Used in drinks and smoothies"],
+      "Other Uses": ["Cosmetic and skincare industry"]
+    }
+  }
+}
+```
 
-│   ├── templates/
+## 📜 Requirements
+```nginx
+Flask
+beautifulsoup4
+requests
+opencv-python
+python-dotenv
+sqlalchemy
+gunicorn
+```
 
-│   │   └── index.html
+## Install all dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-│   ├── __init__.py
+## ☁️ Deployment (Render / Railway / Heroku)
+- Push your code to GitHub.
+- Add environment variables (GOOGLE_API_KEY, GOOGLE_CSE_ID) in the deployment dashboard.
+- Use the following Procfile entry:
 
-│   ├── routes.py
+```makefile
+web: gunicorn app:app
+Deploy the project — it will automatically launch your Flask web app.
+```
 
-│   └── model.py
+## 👨‍💻 Developer Info
+Developer: Isaac Nyame Taylor
+Year: 2025
 
-├── models/
+## 📄 License
+This project is licensed under the MIT License — free for personal and academic use with attribution.
 
-│   └── gender_age_model.h5
+## ⭐ Support
+If you find this project useful, don’t forget to star ⭐ the repository on GitHub!
+Your support helps improve the project and inspire new AI-driven innovations.
 
-├── tests/
-
-│   └── test_app.py
-
-├── .gitignore
-
-├── README.md
-
-├── requirements.txt
-
-└── run.py
-
-1. app/: Contains the Flask application files.
-2. static/: Contains static files (CSS, JavaScript).
-3. templates/: Contains HTML templates.
-4. __init__.py: Initializes the Flask app.
-5. routes.py: Contains the route definitions.
-6. model.py: Contains the machine learning model loading and prediction logic.
-7. models/: Contains the pre-trained machine learning models.
-8. tests/: Contains test files.
-9. .gitignore: Specifies files and directories to be ignored by Git.
-10. README.md: This README file.
-11. requirements.txt: Lists the Python dependencies.
-12. run.py: The entry point to run the Flask application.
-
-Contact
-
-For any inquiries or feedback, please contact nyameget@gmail.com.
-
-Thank you for visiting our repository! We hope you find this project useful and interesting.
+“🌾 Empowering environmental awareness through AI and intelligent automation.”
