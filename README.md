@@ -41,7 +41,7 @@ The app uses a **deep learning model** to analyze plant images and detect diseas
 
 ## 🧩 Folder Structure
 
-📁 intelligent-plant-recognition-system
+```📁 intelligent-plant-recognition-system
 │
 ├── app.py                        # Main Flask application entry point
 ├── requirements.txt               # Python dependencies
@@ -82,7 +82,7 @@ The app uses a **deep learning model** to analyze plant images and detect diseas
 │   │   └── uploads/               # Uploaded plant images
 │
 └── README.md
-
+```
 ---
 
 ## 🚀 Installation & Setup
