@@ -70,7 +70,7 @@ def resolve_plant_uses(
     Returns (plant_uses, possibly_updated_common_names).
     """
     adjusted_common_names = choose_common_name(common_names, family, botanical_name)
-    plant_uses = None
+    # plant_uses = None
 
     for cn in adjusted_common_names:
         plant_uses = get_plant_uses(cn, botanical_name)

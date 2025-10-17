@@ -1,0 +1,138 @@
+{% extends "partials/base.html" %}
+
+{% block content %}
+<section class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 transition-colors duration-300">
+  <div class="max-w-5xl mx-auto">
+    <!-- Card Container -->
+    <div class="bg-white dark:bg-gray-800 shadow-2xl rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-green-400/20">
+
+      <!-- Image -->
+      <div class="relative w-full h-80 bg-gray-200 dark:bg-gray-700">
+        <img src="{{ data.image_url }}" alt="Plant image" class="object-cover w-full h-full">
+        <div class="absolute bottom-4 left-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow">
+          Identified Plant
+        </div>
+      </div>
+
+      <!-- Card Content -->
+      <div class="p-8 space-y-8">
+        <!-- Plant Name -->
+        <div class="text-center border-b border-gray-300 dark:border-gray-600 pb-6">
+          <h2 class="text-3xl font-bold text-green-700 dark:text-green-400">{{ data.results.common_name }}</h2>
+          <p class="text-gray-600 dark:text-gray-300 text-lg italic mt-2">{{ data.results.name }}</p>
+        </div>
+
+        <!-- Taxonomy -->
+        <div class="space-y-3">
+          <h3 class="text-xl font-semibold text-green-700 dark:text-green-400 flex items-center gap-2">
+            <i class="ri-leaf-line"></i> Taxonomy
+          </h3>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700 dark:text-gray-300">
+            {% for key, value in data.results.taxonomy.items() %}
+            <li class="bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2">
+              <span class="font-semibold capitalize">{{ key }}:</span> {{ value }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <h3 class="text-xl font-semibold text-green-700 dark:text-green-400 flex items-center gap-2 mb-2">
+            <i class="ri-file-text-line"></i> Description
+          </h3>
+          <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+            {% if data.results.description %}
+              {{ data.results.description }}
+            {% else %}
+              No plant description was found.
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- Irrigation Info -->
+        <div>
+          <h3 class="text-xl font-semibold text-green-700 dark:text-green-400 flex items-center gap-2 mb-2">
+            <i class="ri-drop-line"></i> Irrigation
+          </h3>
+          <p class="text-gray-700 dark:text-gray-300">{{ data.results.watering }}</p>
+        </div>
+
+        <!-- Disease Info -->
+        <div>
+          <h3 class="text-2xl font-bold text-red-600 dark:text-red-400 mt-6 mb-3">Disease Information</h3>
+          <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-600 p-4 rounded-lg space-y-2">
+            <p class="font-semibold text-lg">{{ data.results.disease_name }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ data.results.disease_common_name }}</p>
+            <p class="text-gray-700 dark:text-gray-300">
+              <span class="font-semibold">Severity:</span> {{ data.results.disease_category }}
+            </p>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {{ data.results.disease_description or 'No disease information found.' }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Plant Uses -->
+        <div>
+          <h3 class="text-2xl font-bold text-green-700 dark:text-green-400 mt-6 mb-3">Plant Uses</h3>
+
+          {% if data.results.plant_uses_type == 'set' %}
+            <ul class="list-disc ml-6 text-gray-700 dark:text-gray-300 space-y-1">
+              {% for use in data.results.plant_uses %}
+                <li>{{ use }}</li>
+              {% endfor %}
+            </ul>
+
+          {% else %}
+            {% set has_uses = false %}
+            {% for key, value in data.results.plant_uses.items() %}
+              {% if value|length > 0 %}
+                {% set has_uses = true %}
+              {% endif %}
+            {% endfor %}
+
+            {% if has_uses %}
+              {% for key, value in data.results.plant_uses.items() %}
+                {% if value|length > 0 %}
+                  <div class="mb-4">
+                    <h4 class="text-lg font-semibold text-green-700 dark:text-green-400">{{ key }}</h4>
+                    {% if key == 'Edible Parts' %}
+                      <p class="text-gray-700 dark:text-gray-300">{{ value | join(', ') }}</p>
+                    {% else %}
+                      <ul class="list-disc ml-6 text-gray-700 dark:text-gray-300 space-y-1">
+                        {% for use in value %}
+                          <li>{{ use }}</li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <div class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4 rounded-lg">
+                <p class="text-gray-800 dark:text-gray-200 mb-2">
+                  No detailed uses found. Try searching online for more information:
+                </p>
+                <a href="https://www.google.com/search?q={{ data.results.name }}+plant+uses"
+                   target="_blank"
+                   class="text-green-600 dark:text-green-400 font-semibold hover:underline">
+                   Search on Google
+                </a>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-10 text-center">
+      <a href="{{ url_for('scan') }}"
+         class="inline-block px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition">
+         Identify Another Plant
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

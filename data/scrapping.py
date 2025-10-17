@@ -71,7 +71,6 @@ def find_plant_page_by_name(common_name, botanical_name):
     else:
         result_table_b = result_table_a = result_table
 
-    # This checks the table for the result that best describes the searched plant
     def check_table(result_table_):
         if not result_table_:
             return None, None
@@ -95,39 +94,32 @@ def find_plant_page_by_name(common_name, botanical_name):
 
 # This gets the medical uses from the pfaf page
 def scrape_medical_uses(soup):
-    # Find the section containing Edible Uses
-    medicinal_uses_section = soup.find('h2', string='Medicinal Uses')
+    # Find the section containing Medicinal Uses (case-insensitive, robust)
+    medicinal_uses_section = soup.find(lambda tag: tag.name == 'h2' and 'medicinal' in tag.get_text(strip=True).lower())
 
     if not medicinal_uses_section:
         print("Medicinal Uses section not found on the page")
         return None
 
-    # Find the parent div with class 'boots3' containing Edible Uses content
+    # Find the parent div with class 'boots2' containing Medicinal Uses content
     boots2_div = medicinal_uses_section.find_next('div', class_='boots2')
 
     if not boots2_div:
-        print("Unable to locate the 'boots3' class for Medical Uses")
+        print("Unable to locate the 'boots2' class for Medicinal Uses")
         return None
 
-    # Initialize content to collect text
     medicinal_uses = []
-
-    # Extract the content within the 'boots3' class
     next_element = boots2_div.find_next()
 
     while next_element:
-        # Check if we've reached the end marker (small tag with text-muted class)
         if next_element.name == 'small' and 'text-muted' in next_element.get('class', []):
             break
 
-        # Remove <br> tags
         for br_tag in next_element.find_all('br'):
-            br_tag.replace_with('\n')  # Replace <br> with newline
-
-        # Remove <i> tags and their content
+            br_tag.replace_with('\n')
         for i_tag in next_element.find_all('i'):
-            i_tag.decompose()  # Completely remove <i> tags and their content
-        # Check for "Edible Part" text followed by <a> tags
+            i_tag.decompose()
+
         if len(next_element.find_all('a')) == 0:
             medicinal_uses.append(next_element.get_text(strip=True))
         else:
@@ -139,46 +131,38 @@ def scrape_medical_uses(soup):
 
 # This gets the edible uses from the pfaf page
 def scrape_edible_uses(soup):
-    # Find the section containing Edible Uses
-    edible_uses_section = soup.find('h2', string='Edible Uses')
+    # Find the section containing Edible Uses (case-insensitive)
+    edible_uses_section = soup.find(lambda tag: tag.name == 'h2' and 'edible' in tag.get_text(strip=True).lower())
 
     if not edible_uses_section:
         print("Edible Uses section not found on the page")
         return None
 
-    # Find the parent div with class 'boots3' containing Edible Uses content
     boots3_div = edible_uses_section.find_next('div', class_='boots3')
 
     if not boots3_div:
         print("Unable to locate the 'boots3' class for Edible Uses")
         return None
 
-    # Initialize content to collect text
     edible_parts = []
     edible_uses = []
 
-    # Extract the content within the 'boots3' class
     next_element = boots3_div.find_next()
 
     while next_element:
-        # Check if we've reached the end marker (small tag with text-muted class)
         if next_element.name == 'small' and 'text-muted' in next_element.get('class', []):
             break
 
-        # Remove <br> tags
         for br_tag in next_element.find_all('br'):
-            br_tag.replace_with('\n')  # Replace <br> with newline
-
-        # Remove <i> tags and their content
+            br_tag.replace_with('\n')
         for i_tag in next_element.find_all('i'):
-            i_tag.decompose()  # Completely remove <i> tags and their content
-        # Check for "Edible Part" text followed by <a> tags
+            i_tag.decompose()
+
         if "Edible Part" in next_element.get_text():
             edible_part_tags = next_element.find_all('a')
             for tag in edible_part_tags:
                 edible_parts.append(tag.get_text(separator='\n', strip=True))
 
-        # Check for "Edible Use"
         if 'Edible Uses' in next_element.get_text():
             edible_uses.append(next_element.find_all(string=True)[-2])
         else:
@@ -190,30 +174,26 @@ def scrape_edible_uses(soup):
 
 # This gets the other uses from the pfaf page
 def scrape_other_uses(soup):
-    # Find the section containing Edible Uses
-    other_uses_section = soup.find('h2', string='Other Uses')
+    # Find the section containing Other Uses (case-insensitive)
+    other_uses_section = soup.find(lambda tag: tag.name == 'h2' and 'other uses' in tag.get_text(strip=True).lower())
 
     if not other_uses_section:
         print("Other Uses section not found on the page")
         return None
 
-    # Find the parent div with class 'boots3' containing Edible Uses content
     boots4_div = other_uses_section.find_next('div', class_='boots4')
 
     if not boots4_div:
         print("Unable to locate the 'boots4' class for Other Uses")
         return None
 
-    # Initialize content to collect text
     other_uses = []
-
-    # Extract the content within the 'boots3' class
     next_element = boots4_div.find_next()
 
     while next_element and next_element.name != 'h3':
         if len(next_element.find_all('a')) == 0:
             text = next_element.get_text().strip()
-            if text:  # Check if text is not empty
+            if text:
                 other_uses.append(text)
         else:
             strings = next_element.find_all(string=True)
@@ -222,7 +202,7 @@ def scrape_other_uses(soup):
                 if special_index > 0:
                     other_uses.append(strings[special_index - 1].strip())
             else:
-                if strings[-1].strip():  # Check if last string is not empty
+                if strings[-1].strip():
                     other_uses.append(strings[-1].strip())
 
         next_element = next_element.find_next_sibling()
@@ -253,20 +233,14 @@ def get_plant_uses_pfaf(common_name, botanical_name):
 
 # This gets the plant uses by checking wikipedia
 def get_plant_use_wikipedia(plant_name):
-    # Replace spaces with underscores for the Wikipedia URL
     plant_name = plant_name.replace(' ', '_')
     url = f"https://en.wikipedia.org/wiki/{plant_name}"
-
-    # Fetch the HTML content of the page
     response = requests.get(url)
     if response.status_code != 200:
         print(f"Failed to retrieve page {url}")
         return None
 
-    # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(response.content, "html.parser")
-
-    # Find the "Uses" section manually
     parent = None
     for header in soup.find_all(['h2', 'h3', 'h4', 'h5', 'h6']):
         if 'Uses' in header.text:
@@ -295,12 +269,7 @@ def get_plant_use_wikipedia(plant_name):
 def get_google_uses(common_name):
     def google_search(query_, api_key_, cse_id_, num=10):
         url = "https://www.googleapis.com/customsearch/v1"
-        params = {
-            'q': query_,
-            'key': api_key_,
-            'cx': cse_id_,
-            'num': num
-        }
+        params = {'q': query_, 'key': api_key_, 'cx': cse_id_, 'num': num}
         response = requests.get(url, params=params)
         return response.json()
 
@@ -311,24 +280,18 @@ def get_google_uses(common_name):
 
     results = google_search(query, api_key, cse_id)
 
-    # Extract and print the first snippet
     if 'items' in results:
         for item in results['items']:
             snippet = item.get('snippet')
             if snippet:
                 link = item.get('link')
                 if link:
-                    return {
-                        'snippet': snippet,
-                        'link': link
-                    }
+                    return {'snippet': snippet, 'link': link}
                 break
     else:
         print("No results found")
         link = 'https://www.google.com/search?q={urllib.parse.quote(common_name)}+uses'
-        return {
-            'None': link
-        }
+        return {'None': link}
 
 
 # This gets the plant uses by checking pfaf if no result is returned then checks wikipedia
@@ -349,16 +312,14 @@ def search_pfaf_by_family(family):
     return soup.find('table', id='ContentPlaceHolder1_gvresults')
 
 
-# This finds the exact page url and the latin name of the plant
 def find_plant_page_by_family(family_name, botanical_name):
     result_table = search_pfaf_by_family(family_name)
     botanical_name_ = botanical_name.split(' ')[0]
 
-    # This checks the table for the result that best describes the searched plant
     def check_table_family(result_table_):
         if not result_table_:
             return None, None
-        rows = result_table_.find_all('tr')[1:]  # Skip the header row
+        rows = result_table_.find_all('tr')[1:]
         for row in rows:
             columns = row.find_all('td')
             if len(columns) < 2:
@@ -374,7 +335,6 @@ def find_plant_page_by_family(family_name, botanical_name):
     return latin_name, plant_page_url, common_name
 
 
-# This gets the plant uses by checking pfaf
 def get_plant_uses_pfaf_family(family_name, botanical_name):
     latin_name, plant_page_url, common_name = find_plant_page_by_family(family_name, botanical_name)
     if not plant_page_url:
@@ -393,7 +353,6 @@ def get_plant_uses_pfaf_family(family_name, botanical_name):
     return uses, common_name
 
 
-# This gets the plant uses by checking pfaf if no result is returned then checks wikipedia
 def get_plant_uses_family(family_name, botanical_name):
     uses, common_name = get_plant_uses_pfaf_family(family_name, botanical_name)
     botanical_name = botanical_name.replace('-', ' ') if '-' in botanical_name else botanical_name
@@ -410,7 +369,6 @@ def get_plant_uses_family(family_name, botanical_name):
 
 # This gets the plant description from the wikipedia page
 def get_plant_description_wikipedia(plant_name):
-    # Replace spaces with underscores for the Wikipedia URL
     plant_name = plant_name.split(' ')
     if 'x' in plant_name:
         plant_name.remove('x')
@@ -420,17 +378,13 @@ def get_plant_description_wikipedia(plant_name):
     plant_name = plant_name.replace(' ', '_')
     url = f"https://en.wikipedia.org/wiki/{plant_name}"
 
-    # Fetch the HTML content of the page
     response = requests.get(url)
     if response.status_code != 200:
         print(f"Failed to retrieve page {url}")
         return None
 
-    # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(response.content, "html.parser")
 
-    # Find the "Uses" section manually
-    # description_section = None
     parent = soup.find('div', class_='mw-content-ltr mw-parser-output')
     if parent is None:
         return None
@@ -450,24 +404,19 @@ def get_plant_description_wikipedia(plant_name):
         return None
 
 
-# This gets the image from the name entered
 def search_images_and_encode_first(query):
-    api_key = "AIzaSyDybQAwDNM4X_yiIqDjtR9IZS83QhIQlfM"  # Replace with your actual API key
-    search_engine_id = "9321b59816bac4ca6"  # Replace with your actual search engine ID
-
+    api_key = "AIzaSyDybQAwDNM4X_yiIqDjtR9IZS83QhIQlfM"
+    search_engine_id = "9321b59816bac4ca6"
     url = f"https://www.googleapis.com/customsearch/v1?key={api_key}&cx={search_engine_id}&q={query}&searchType=image"
 
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-
+        response.raise_for_status()
         data = response.json()
         if data["items"]:
             first_image_url = data["items"][0]["link"]
-
             image_response = requests.get(first_image_url)
             image_response.raise_for_status()
-
             image_data = image_response.content
             base64_encoded_data = base64.b64encode(image_data).decode('utf-8')
             return base64_encoded_data

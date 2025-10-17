@@ -8,7 +8,17 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     _password_hash = db.Column("password", db.String(128), nullable=False)
+    profile_pic_data = db.Column(db.LargeBinary, nullable=True)
+    profile_pic_mimetype = db.Column(db.String(50), nullable=True)
     images = db.relationship('Plant', backref='user', lazy=True)
+
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'name': self.name,
+            'email': self.email,
+            'password': self._password_hash
+        }
 
     @property
     def password(self):
@@ -52,7 +62,6 @@ def get_plants(username):
 def get_reviews():
     reviews = db.session.query(Comment).all()
     comments = []
-    print(reviews)
     for review in reviews:
         user = get_user(review.username)
         if user:

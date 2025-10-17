@@ -1,0 +1,92 @@
+{% extends "partials/base.html" %}
+
+{% block content %}
+<section class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-6 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto text-center mb-12">
+    <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-4">
+      History of Identified Plants
+    </h2>
+    <p class="text-gray-600 dark:text-gray-300 text-lg max-w-3xl mx-auto">
+      Here are all of your previously identified plants, along with their botanical details.
+    </p>
+  </div>
+
+  {% if data.plant_data %}
+  <!-- Card Grid -->
+  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    {% for plant in data.plant_data %}
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-green-400/20 transform hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col">
+
+      <!-- Image Section -->
+      <div class="relative w-full h-56 bg-gray-200 dark:bg-gray-700">
+        <img src="{{ plant.image_url }}" alt="Plant Image" class="object-cover w-full h-full">
+        <div class="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm shadow">
+          {{ loop.index }}
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="p-6 flex flex-col justify-between flex-grow space-y-4">
+        <div>
+          <h3 class="text-2xl font-semibold text-green-700 dark:text-green-400 mb-1">
+            {{ plant.plant_data.common_name }}
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400 italic text-sm mb-3">
+            {{ plant.plant_data.name }}
+          </p>
+
+          <!-- Taxonomy -->
+          <div class="text-left mb-3">
+            <h4 class="text-green-600 dark:text-green-400 font-semibold mb-1">Taxonomy</h4>
+            <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+              {% for key, value in plant.plant_data.taxonomy.items() %}
+              <li>
+                <span class="font-medium capitalize">{{ key }}:</span> {{ value }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Description -->
+          <div class="text-left">
+            <h4 class="text-green-600 dark:text-green-400 font-semibold mb-1">Description</h4>
+            <p class="text-gray-700 dark:text-gray-300 text-sm line-clamp-3">
+              {{ plant.plant_data.description }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Irrigation Info -->
+        <div class="text-left text-sm">
+          <p class="text-gray-700 dark:text-gray-300">
+            <span class="font-semibold text-green-700 dark:text-green-400">Irrigation:</span>
+            {{ plant.plant_data.watering }}
+          </p>
+        </div>
+
+        <!-- Read More Button -->
+        <div class="pt-3">
+          <a href="/results/{{ plant.plant_data.plant_id }}"
+             class="inline-block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl transition">
+             Read More
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <!-- No History -->
+  <div class="text-center text-gray-600 dark:text-gray-300 mt-20">
+    <i class="ri-leaf-line text-6xl text-green-500 mb-4"></i>
+    <h3 class="text-2xl font-semibold mb-2">No Identified Plants Yet</h3>
+    <p>Once you identify some plants, they’ll appear here!</p>
+    <a href="{{ url_for('scan') }}"
+       class="mt-6 inline-block bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition font-semibold">
+       Identify a Plant
+    </a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

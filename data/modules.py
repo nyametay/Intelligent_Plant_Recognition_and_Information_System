@@ -19,12 +19,14 @@ def logged_in(session):
     if 'user' in session:
         flash('User has already logged in', 'info')
         return redirect(url_for('home'))
+    return None
 
 
 def not_logged_in(session):
     if 'user' not in session:
         flash('Log in please', 'info')
         return redirect(url_for('signin'))
+    return None
 
 
 def get_login_details(body):
@@ -35,6 +37,7 @@ def get_login_details(body):
 
 def get_signup_details(body):
     # Gets users data to be stored in the database
+    print('d')
     name = str(body['name']).strip()
     username = str(body['username']).strip()
     email = str(body['email']).lower().strip()
@@ -78,7 +81,7 @@ def get_profile_data(username):
     }
 
 
-def delete_user(username):
+def delete_user_(username):
     user = User.query.filter_by(username=username).first()
     # Assuming `get_plants` returns a list of plant objects
     plants = Plant.query.filter_by(username=username).all()
@@ -95,14 +98,14 @@ def delete_user(username):
 
 
 def get_passwords(body):
-    oldPassword = str(body['oldPassword']).strip()
-    newPassword = str(body['newPassword']).strip()
-    passwordConfirmation = str(body['newPasswordConfirmation']).strip()
-    return oldPassword, newPassword, passwordConfirmation
+    old_password = str(body['current_password']).strip()
+    new_password = str(body['new_password']).strip()
+    password_confirmation = str(body['confirm_password']).strip()
+    return old_password, new_password, password_confirmation
 
 
 def get_emails(body):
-    oldPassword = str(body['oldPassword']).strip()
-    oldEmail = str(body['oldEmail']).lower().strip()
-    newEmail = str(body['newEmail']).lower().strip()
-    return oldPassword, oldEmail, newEmail
+    old_password = str(body['current_password']).strip()
+    old_email = str(body['old_email']).lower().strip()
+    new_email = str(body['new_email']).lower().strip()
+    return old_password, new_email, old_email,
