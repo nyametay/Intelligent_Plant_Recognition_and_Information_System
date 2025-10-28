@@ -12,6 +12,9 @@ app.permanent_session_lifetime = timedelta(days=10)
 app.secret_key = '1567tay'
 UPLOAD_FOLDER = 'static/files'
 
+# ✅ Allow larger image uploads (e.g., up to 50 MB)
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
+
 db = SQLAlchemy(app)
 
 # Plant.id API endpoint
@@ -31,3 +34,4 @@ def b64encode_filter(data):
     return base64.b64encode(data).decode('utf-8')
 
 from data import routes
+
