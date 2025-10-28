@@ -343,7 +343,7 @@ def upload():
             is_plant = result.get('is_plant', {})
             if not is_plant.get('binary', False):
                 flash('Image does not contain a plant.', 'danger')
-                return redirect(url_for('image_mode'))
+                return redirect(url_for('scan'))
 
             classification = result.get('classification', {})
             suggestions = classification.get('suggestions', [])
@@ -529,3 +529,4 @@ def history():
                                    data={'plant_data': plant_details, 'active_page': 'history'})
     except Exception as e:
         return exception_error(e, 'history')
+
