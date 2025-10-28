@@ -1,4 +1,3 @@
-<script>
 let currentStream;
 let useFrontCamera = true;
 
@@ -70,4 +69,4 @@ uploadCapturedBtn.addEventListener("click", () => {
   uploadPreview.src = imageData;
   uploadPreview.classList.remove("hidden");
 });
-</script>
+
