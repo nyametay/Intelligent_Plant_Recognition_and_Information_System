@@ -57,7 +57,8 @@ captureBtn.addEventListener("click", () => {
 });
 
 uploadCapturedBtn.addEventListener("click", () => {
-  const imageData = capturedCanvas.toDataURL("image/png");
+  //const imageData = capturedCanvas.toDataURL("image/png");
+  const imageData = capturedCanvas.toDataURL("image/jpeg", 0.8); // compress to 70% quality
   capturedImageInput.value = imageData;
 
   // Close camera modal
@@ -69,4 +70,5 @@ uploadCapturedBtn.addEventListener("click", () => {
   uploadPreview.src = imageData;
   uploadPreview.classList.remove("hidden");
 });
+
 
