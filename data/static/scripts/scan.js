@@ -1,62 +1,59 @@
-const fileInput = document.getElementById('fileInput');
-const uploadPreview = document.getElementById('uploadPreview');
-const uploadLabel = document.getElementById('uploadLabel');
-const cameraModal = document.getElementById('cameraModal');
-const openCamera = document.getElementById('openCamera');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const closeCamera = document.getElementById('closeCamera');
+let currentStream = null;
+let useFrontCamera = true;
 const cameraFeed = document.getElementById('cameraFeed');
 const capturedCanvas = document.getElementById('capturedCanvas');
-const captureBtn = document.getElementById('captureBtn');
 const capturedImageInput = document.getElementById('capturedImageInput');
+const uploadCaptureBtn = document.getElementById('uploadCaptureBtn');
 
-let stream;
+async function startCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+  }
 
-// === FILE UPLOAD PREVIEW ===
-fileInput.addEventListener("change", (event) => {
-const file = event.target.files[0];
-if (file) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    uploadPreview.src = e.target.result;
-    uploadPreview.classList.remove('hidden');
+  const constraints = {
+    video: {
+      facingMode: useFrontCamera ? 'user' : 'environment'
+    }
   };
-  reader.readAsDataURL(file);
-  uploadLabel.querySelector("p").textContent = "Selected: " + file.name;
+
+  try {
+    currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+    cameraFeed.srcObject = currentStream;
+  } catch (err) {
+    console.error('Camera access denied:', err);
+  }
 }
+
+document.getElementById('openCamera').addEventListener('click', () => {
+  document.getElementById('cameraModal').classList.remove('hidden');
+  startCamera();
 });
 
-// === CAMERA HANDLING ===
-openCamera.addEventListener("click", async () => {
-try {
-  stream = await navigator.mediaDevices.getUserMedia({ video: true });
-  cameraFeed.srcObject = stream;
-  cameraModal.classList.remove("hidden");
-  capturedCanvas.classList.add("hidden");
-  cameraFeed.classList.remove("hidden");
-} catch (err) {
-  alert("Unable to access the camera. Please allow permissions.");
-}
+document.getElementById('switchCameraBtn').addEventListener('click', () => {
+  useFrontCamera = !useFrontCamera;
+  startCamera();
 });
 
-const closeCameraModal = () => {
-cameraModal.classList.add("hidden");
-if (stream) stream.getTracks().forEach(track => track.stop());
-};
+document.getElementById('captureBtn').addEventListener('click', () => {
+  const context = capturedCanvas.getContext('2d');
+  capturedCanvas.width = cameraFeed.videoWidth;
+  capturedCanvas.height = cameraFeed.videoHeight;
+  context.drawImage(cameraFeed, 0, 0);
+  capturedCanvas.classList.remove('hidden');
+  uploadCaptureBtn.classList.remove('hidden');
 
-closeModalBtn.addEventListener("click", closeCameraModal);
-closeCamera.addEventListener("click", closeCameraModal);
+  // Convert to base64 and store
+  const imageData = capturedCanvas.toDataURL('image/png');
+  capturedImageInput.value = imageData;
+});
 
-captureBtn.addEventListener("click", () => {
-capturedCanvas.width = cameraFeed.videoWidth;
-capturedCanvas.height = cameraFeed.videoHeight;
-const context = capturedCanvas.getContext("2d");
-context.drawImage(cameraFeed, 0, 0, cameraFeed.videoWidth, cameraFeed.videoHeight);
+document.getElementById('uploadCaptureBtn').addEventListener('click', () => {
+  document.getElementById('uploadForm').submit();
+});
 
-const capturedData = capturedCanvas.toDataURL("image/png");
-capturedImageInput.value = capturedData;
-
-capturedCanvas.classList.remove("hidden");
-cameraFeed.classList.add("hidden");
-alert("Image captured! You can now submit the form.");
+document.getElementById('closeModalBtn').addEventListener('click', () => {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+  }
+  document.getElementById('cameraModal').classList.add('hidden');
 });
