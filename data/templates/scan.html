@@ -59,11 +59,11 @@
 </section>
 
 <!-- Camera Modal -->
-<div id="cameraModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+<div id="cameraModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
   <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-11/12 md:w-1/2 p-6 relative text-center">
 
-    <!-- Close X Button -->
-    <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-500 hover:text-green-500 text-2xl">
+    <!-- Close Button (X) -->
+    <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl">
       <i class="fas fa-times"></i>
     </button>
 
@@ -76,16 +76,14 @@
     <canvas id="capturedCanvas" class="hidden mx-auto w-full max-h-80 rounded-xl mt-4"></canvas>
 
     <!-- Controls -->
-    <div class="flex flex-wrap justify-center gap-4 mt-6">
+    <div class="flex justify-center gap-4 mt-6">
       <button id="captureBtn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
         <i class="fas fa-camera"></i> Capture
       </button>
-
-      <button id="switchCameraBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+      <button id="switchCameraBtn" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
         <i class="fas fa-sync-alt"></i> Switch
       </button>
-
-      <button id="uploadCaptureBtn" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition hidden">
+      <button id="uploadCapturedBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition hidden">
         <i class="fas fa-upload"></i> Upload
       </button>
     </div>
