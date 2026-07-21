@@ -42,7 +42,7 @@ The app uses a **deep learning model** to analyze plant images and detect diseas
 ## 🧩 Folder Structure
 
 ```
-📁 intelligent-plant-recognition-system
+📁 intelligent_plant_recognition_system
 │
 ├── app.py                        # Main Flask application entry point
 ├── requirements.txt               # Python dependencies
@@ -91,7 +91,7 @@ The app uses a **deep learning model** to analyze plant images and detect diseas
 ### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/yourusername/intelligent-plant-recognition-system.git
-cd intelligent-plant-recognition-system
+cd intelligent_plant_recognition_system
 ```
 
 ## 2️⃣ Create a Virtual Environment
