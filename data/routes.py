@@ -37,7 +37,7 @@ def signin():
             flash('Wrong credentials', 'danger')
             return redirect(url_for('signin'))
         session['user'] = user.to_dict()
-        flash('Login successful', 'danger')
+        flash('Login successful', 'success')
         return redirect(url_for('home'))
     except Exception as e:
         # Error Occurred
@@ -529,4 +529,5 @@ def history():
                                    data={'plant_data': plant_details, 'active_page': 'history'})
     except Exception as e:
         return exception_error(e, 'history')
+
 
